@@ -1,6 +1,4 @@
-"use client"
-
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import PlayerNameInput from '@/components/PlayerNameInput'
@@ -117,41 +115,42 @@ export default function Game() {
   }
 
   return (
-    <main className={`flex min-h-screen flex-col items-center justify-start p-4 md:p-24 bg-[#D2B48C] ${pirataOne.className}`}>
-      <div className="w-full max-w-4xl flex justify-between items-center mb-4">
-        <motion.h1 
-          className="text-2xl md:text-3xl font-bold text-[#8B4513]"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Round {currentRound} - {phase === 'betting' ? 'Betting Phase' : 'Tricks Phase'}
-        </motion.h1>
-        <motion.button
-          className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors"
+    <Suspense fallback={<div>Loading...</div>}>
+      <main className={`flex min-h-screen flex-col items-center justify-start p-4 md:p-24 bg-[#D2B48C] ${pirataOne.className}`}>
+        <div className="w-full max-w-4xl flex justify-between items-center mb-4">
+          <motion.h1 
+            className="text-2xl md:text-3xl font-bold text-[#8B4513]"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Round {currentRound} - {phase === 'betting' ? 'Betting Phase' : 'Tricks Phase'}
+          </motion.h1>
+          <motion.button
+            className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleExitGame}
+          >
+            Exit Game
+          </motion.button>
+        </div>
+        <GameTable 
+          gameState={gameState} 
+          currentRound={currentRound}
+          currentPhase={phase}
+          players={players} 
+          updateGameState={updateGameState}
+        />
+        <motion.button 
+          className="mt-4 bg-[#8B4513] text-white py-2 px-4 rounded hover:bg-[#6B3E0A] transition-colors"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={handleExitGame}
+          onClick={handleNextPhase}
         >
-          Exit Game
+          {phase === 'betting' ? 'Start Round' : currentRound < rounds ? 'Next Round' : 'Finish Game'}
         </motion.button>
-      </div>
-      <GameTable 
-        gameState={gameState} 
-        currentRound={currentRound}
-        currentPhase={phase}
-        players={players} 
-        updateGameState={updateGameState}
-      />
-      <motion.button 
-        className="mt-4 bg-[#8B4513] text-white py-2 px-4 rounded hover:bg-[#6B3E0A] transition-colors"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={handleNextPhase}
-      >
-        {phase === 'betting' ? 'Start Round' : currentRound < rounds ? 'Next Round' : 'Finish Game'}
-      </motion.button>
-    </main>
+      </main>
+    </Suspense>
   )
 }
-
