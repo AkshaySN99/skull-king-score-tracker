@@ -5,7 +5,7 @@ import { Pirata_One } from 'next/font/google'
 const pirataOne = Pirata_One({ weight: '400', subsets: ['latin'] })
 
 
-interface PlayerData {
+interface PlayerGameState {
   bet: number | null
   tricks: number | null
   score: number | null
@@ -14,16 +14,17 @@ interface PlayerData {
 }
 
 interface GameTableProps {
-  gameState: PlayerData[][]
+  gameState: PlayerGameState[][]
   currentRound: number
   currentPhase: 'betting' | 'tricks'
   players: string[]
-  updateGameState: (round: number, playerIndex: number, field: string, value: number | null) => void
+  // Change the type of 'field' to 'keyof PlayerGameState'
+  updateGameState: (round: number, playerIndex: number, field: keyof PlayerGameState, value: number | null) => void
 }
 
 
 export default function GameTable({ gameState, currentRound, currentPhase, players, updateGameState }: GameTableProps) {
-  const isEditable = (round: number, field: 'bet' | 'tricks' | 'bonus', playerData: PlayerData) => {
+  const isEditable = (round: number, field: 'bet' | 'tricks' | 'bonus', playerData: PlayerGameState) => {
     return round === currentRound && 
            ((field === 'bet' && currentPhase === 'betting') || 
             (field === 'tricks' && currentPhase === 'tricks') ||
@@ -67,7 +68,7 @@ export default function GameTable({ gameState, currentRound, currentPhase, playe
                   {roundIndex + 1}
                 </div>
               </td>
-              {round.map((playerData: PlayerData, playerIndex) => (
+              {round.map((playerData: PlayerGameState, playerIndex) => (
                 <React.Fragment key={playerIndex}>
                   <td className={`p-1 border-2 border-[#8B4513] ${roundIndex < currentRound - 1 ? 'bg-gray-300' : roundIndex > currentRound - 1 ? 'bg-gray-200' : ''}`}>
                     <div className="flex flex-col h-full">

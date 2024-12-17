@@ -6,7 +6,7 @@ import { Pirata_One } from 'next/font/google'
 
 const pirataOne = Pirata_One({ weight: '400', subsets: ['latin'] })
 
-interface PlayerData {
+interface PlayerGameState {
   bet: number | null
   tricks: number | null
   score: number | null
@@ -15,7 +15,7 @@ interface PlayerData {
 }
 
 interface ResultsScreenProps {
-  gameState: PlayerData[][]
+  gameState: PlayerGameState[][]
   players: string[]
   onNewGame: () => void
 }
