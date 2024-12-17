@@ -10,6 +10,14 @@ import { Pirata_One } from 'next/font/google'
 
 const pirataOne = Pirata_One({ weight: '400', subsets: ['latin'] })
 
+interface PlayerGameState {
+  bet: number | null;
+  tricks: number | null;
+  score: number | null;
+  bonus: number | null;
+  total: number | null;
+}
+
 export default function Game() {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -18,7 +26,7 @@ export default function Game() {
 
   const [players, setPlayers] = useState<string[]>([])
   const [currentRound, setCurrentRound] = useState(1)
-  const [gameState, setGameState] = useState<any[][]>([])
+  const [gameState, setGameState] = useState<PlayerGameState[][]>([])
   const [gameFinished, setGameFinished] = useState(false)
   const [phase, setPhase] = useState<'betting' | 'tricks'>('betting')
 
