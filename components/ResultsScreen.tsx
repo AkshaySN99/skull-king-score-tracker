@@ -6,8 +6,16 @@ import { Pirata_One } from 'next/font/google'
 
 const pirataOne = Pirata_One({ weight: '400', subsets: ['latin'] })
 
+interface PlayerData {
+  bet: number | null
+  tricks: number | null
+  score: number | null
+  bonus: number | null
+  total: number | null
+}
+
 interface ResultsScreenProps {
-  gameState: any[][]
+  gameState: PlayerData[][]
   players: string[]
   onNewGame: () => void
 }
@@ -138,7 +146,7 @@ export default function ResultsScreen({ gameState, players, onNewGame }: Results
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        <h3 className="text-2xl font-bold mb-4 text-[#8B4513]">Winner's Podium</h3>
+        <h3 className="text-2xl font-bold mb-4 text-[#8B4513]">Winner&apos;s Podium</h3>
         <div className="flex items-end justify-center space-x-4">
           <div className="flex flex-col items-center">
             <div className="bg-[#C0C0C0] w-24 h-32 flex items-center justify-center rounded-t-lg">

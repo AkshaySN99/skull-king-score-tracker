@@ -4,16 +4,26 @@ import { Pirata_One } from 'next/font/google'
 
 const pirataOne = Pirata_One({ weight: '400', subsets: ['latin'] })
 
+
+interface PlayerData {
+  bet: number | null
+  tricks: number | null
+  score: number | null
+  bonus: number | null
+  total: number | null
+}
+
 interface GameTableProps {
-  gameState: any[][]
+  gameState: PlayerData[][]
   currentRound: number
   currentPhase: 'betting' | 'tricks'
   players: string[]
   updateGameState: (round: number, playerIndex: number, field: string, value: number | null) => void
 }
 
+
 export default function GameTable({ gameState, currentRound, currentPhase, players, updateGameState }: GameTableProps) {
-  const isEditable = (round: number, field: 'bet' | 'tricks' | 'bonus', playerData: any) => {
+  const isEditable = (round: number, field: 'bet' | 'tricks' | 'bonus', playerData: PlayerData) => {
     return round === currentRound && 
            ((field === 'bet' && currentPhase === 'betting') || 
             (field === 'tricks' && currentPhase === 'tricks') ||
@@ -57,7 +67,7 @@ export default function GameTable({ gameState, currentRound, currentPhase, playe
                   {roundIndex + 1}
                 </div>
               </td>
-              {round.map((playerData, playerIndex) => (
+              {round.map((playerData: PlayerData, playerIndex) => (
                 <React.Fragment key={playerIndex}>
                   <td className={`p-1 border-2 border-[#8B4513] ${roundIndex < currentRound - 1 ? 'bg-gray-300' : roundIndex > currentRound - 1 ? 'bg-gray-200' : ''}`}>
                     <div className="flex flex-col h-full">
