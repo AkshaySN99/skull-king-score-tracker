@@ -76,12 +76,17 @@ export default function Game() {
     }
   }
 
-  const updateGameState = (round: number, playerIndex: number, field: string, value: number | null) => {
+  const updateGameState = (round: number, playerIndex: number, field: keyof PlayerGameState, value: number | null) => {
+    // Check if the field is 'bet' or 'tricks' and validate the value
     if ((field === 'bet' || field === 'tricks') && (typeof value !== 'number' || value < 0 || value > round)) return
-
+  
+    // Create a new game state array to avoid mutating the original state
     const newGameState = [...gameState]
+    
+    // Update the specific field for the player in the current round
     newGameState[round - 1][playerIndex][field] = value
-
+  
+    // If the field is 'tricks' or 'bonus', calculate the score and total
     if (field === 'tricks' || field === 'bonus') {
       const bet = newGameState[round - 1][playerIndex].bet
       const tricks = newGameState[round - 1][playerIndex].tricks
@@ -93,9 +98,11 @@ export default function Game() {
         newGameState[round - 1][playerIndex].total = score + bonus
       }
     }
-
+  
+    // Update the game state with the new values
     setGameState(newGameState)
   }
+  
 
   const handleExitGame = () => {
     router.push('/')
